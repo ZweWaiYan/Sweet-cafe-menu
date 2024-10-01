@@ -419,7 +419,7 @@ hr {
     margin: 5px 0px 0px;
 }
 
-.modal_total_price_container .modal_total_price {
+.modal_total_price_container #modal_total_price {
     font-weight: bold;
     font-size: 20px;
 }
@@ -483,11 +483,32 @@ hr {
 
 /* Empty Cart style */
 
-#nav_cart_title {
+#nav_cart_header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#nav_cart_header #nav_cart_title {
     color: rgb(197, 60, 16);
     font-weight: bold;
     font-size: 25px;
-    margin: 10px 15px 20px;
+    margin: 10px 15px 10px;
+}
+
+#nav_cart_header #nav_cart_close {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    margin-right: 15px;
+}
+
+#nav_cart_hr {
+    margin: 0px 0px 20px;
+    height: 2px;
+    color: #000000;    
+    background-color: #000000;/
 }
 
 #nav_cart_list {

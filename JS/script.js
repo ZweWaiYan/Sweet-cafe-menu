@@ -19,7 +19,9 @@ const nav_cart_ul = document.querySelector('#nav_cart_ul');
 const orderConfirm_dialog = document.querySelector("#orderConfirm_dialog");
 const nav_Cartmodal_dialog = document.querySelector("#nav_Cartmodal_dialog");
 
-const confirm_menu_list_container = document.querySelector('#confirm_menu_list_container')
+const confirm_menu_list_container = document.querySelector('#confirm_menu_list_container');
+
+const nav_cart_close = document.querySelector("#nav_cart_close");
 
 const cart_data = [];
 
@@ -152,7 +154,7 @@ function menuCardIncreaseDecreaseBtn(item, menu_button) {
 }
 
 //confirm order Button
-function confirmOrderBtn(itemTotalCartPrice) {    
+function confirmOrderBtn(itemTotalCartPrice) {
 
     //just call one time  confirm order Button    
     if (!document.getElementById("confirm_order_btn")) {
@@ -166,33 +168,31 @@ function confirmOrderBtn(itemTotalCartPrice) {
             <div id="confirm_order_btn">Confirm Order</div>
         `;
         cart_ul.appendChild(cart_total);
-
-        const confirm_order_btn = document.querySelector("#confirm_order_btn");
-        confirm_order_btn.addEventListener("click", () => {
-
-            orderConfirm_dialog.showModal();
-
-            showDataModal(itemTotalCartPrice);
-
-            //clear all cart data   
-            cart_data.length = 0;
-
-            // for Reset Cart Item UI
-            CartItemUI();
-
-            // for Reset Menu Cart Button UI
-            ResetMenuCardBtn();
-        });
     } else {
         //update Cart Total Price
         const cartTotalPriceElement = document.querySelector('.cart_total_price');
-
-        console.log('itemTotalCartPrice' , itemTotalCartPrice);
 
         if (cartTotalPriceElement) {
             cartTotalPriceElement.textContent = `$${itemTotalCartPrice}`;
         }
     }
+
+    const confirm_order_btn = document.querySelector("#confirm_order_btn");
+    confirm_order_btn.addEventListener("click", () => {
+
+        orderConfirm_dialog.showModal();
+
+        showDataModal(itemTotalCartPrice);
+
+        //clear all cart data   
+        cart_data.length = 0;
+
+        // for Reset Cart Item UI
+        CartItemUI();
+
+        // for Reset Menu Cart Button UI
+        ResetMenuCardBtn();
+    });
 }
 
 //Add to Cart 
@@ -314,8 +314,8 @@ function CartItemUI() {
                     <hr>           
                 `;
             cart_list.appendChild(cart_item);
-            
-            itemTotalCartPrice += data.menuTotalPrice;            
+
+            itemTotalCartPrice += data.menuTotalPrice;
 
             // Add event listener to the parent container        
             const deleteBtn = cart_item.querySelector('.circle_cart_item_delete_container');
@@ -333,15 +333,15 @@ function CartItemUI() {
         const cart_total = document.querySelector('.cart_total');
         const confirm_order_btn = document.querySelector('#confirm_order_btn');
 
-        cart_total.remove();
-        confirm_order_btn.remove();
+        if (cart_total && confirm_order_btn) {
+            cart_total.remove();
+            confirm_order_btn.remove();
+        }
     }
 }
 
 //confirm order Button
 function nav_confirmOrderBtn(itemTotalCartPrice) {
-
-    console.log('itemTotalCartPrice' , itemTotalCartPrice);
 
     //just call one time  confirm order Button    
     if (!document.getElementById("nav_confirm_order_btn")) {
@@ -355,33 +355,33 @@ function nav_confirmOrderBtn(itemTotalCartPrice) {
             <div id="nav_confirm_order_btn">Confirm Order</div>
         `;
         nav_cart_ul.appendChild(nav_cart_total);
-
-        const nav_confirm_order_btn = document.querySelector("#nav_confirm_order_btn");
-        nav_confirm_order_btn.addEventListener("click", () => {
-
-            nav_Cartmodal_dialog.close();
-
-            orderConfirm_dialog.showModal();
-
-            showDataModal(itemTotalCartPrice);
-
-            //clear all cart data   
-            cart_data.length = 0;
-
-            // for Reset Cart Item UI
-            navCartItemUI();
-
-            // for Reset Menu Cart Button UI
-            ResetMenuCardBtn();
-
-        });
     } else {
         //update Cart Total Price
-        const cartTotalPriceElement = document.querySelector('.cart_total_price');
+        const cartTotalPriceElement = document.querySelector('.nav_cart_total_price');
         if (cartTotalPriceElement) {
             cartTotalPriceElement.textContent = `$${itemTotalCartPrice}`;
         }
     }
+
+    const nav_confirm_order_btn = document.querySelector("#nav_confirm_order_btn");
+    nav_confirm_order_btn.addEventListener("click", () => {
+
+        nav_Cartmodal_dialog.close();
+
+        orderConfirm_dialog.showModal();
+
+        showDataModal(itemTotalCartPrice);
+
+        //clear all cart data   
+        cart_data.length = 0;
+
+        // for Reset Cart Item UI
+        navCartItemUI();
+
+        // for Reset Menu Cart Button UI
+        ResetMenuCardBtn();
+
+    });
 }
 
 // show nav Cart UI 
@@ -449,7 +449,7 @@ function navCartItemUI() {
 }
 
 //Show data on Modal 
-function showDataModal(itemTotalCartPrice) {
+function showDataModal(itemTotalCartPrice) {    
 
     cart_data.forEach((item) => {
 
@@ -474,18 +474,25 @@ function showDataModal(itemTotalCartPrice) {
         confirm_menu_list_container.appendChild(cart_item);
     });
 
-    const cart_total = document.createElement("div");
-    cart_total.classList.add("cart_total");
-    cart_total.innerHTML =
-        `                                  
-                <hr>                                               
-                <div class="modal_total_price_container">
-                    <p>Order Total</p>
-                    <div class="modal_total_price">$${itemTotalCartPrice}</div>
-                </div>
-            `;
-    confirm_menu_list_container.appendChild(cart_total);
-}
+    if (!document.getElementById("modal_total_price")) {        
+        const cart_total = document.createElement("div");
+        cart_total.classList.add("cart_total");
+        cart_total.innerHTML =
+            `                                  
+                    <hr>                                               
+                    <div class="modal_total_price_container">
+                        <p>Order Total</p>
+                        <div id="modal_total_price">$${itemTotalCartPrice}</div>
+                    </div>
+                `;
+        confirm_menu_list_container.appendChild(cart_total);
+    } else {        
+        const modaltotalprice = document.querySelector('#modal_total_price');
+        if (modaltotalprice) {
+            modaltotalprice.textContent = `$${itemTotalCartPrice}`;
+        }
+    }
+};
 
 nav_item.addEventListener("click", () => {
 
@@ -496,7 +503,11 @@ nav_item.addEventListener("click", () => {
 
     //show modal
     nav_Cartmodal_dialog.showModal();
-})
+});
+
+nav_cart_close.addEventListener("click", () => {
+    nav_Cartmodal_dialog.close();
+});
 
 // Main call for everythings! :)
 getMenu();
